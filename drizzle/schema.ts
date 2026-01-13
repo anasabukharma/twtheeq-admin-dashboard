@@ -41,6 +41,19 @@ export const visitors = mysqlTable("visitors", {
   // Current page tracking
   currentPage: varchar("currentPage", { length: 64 }),
   
+  // Technical information
+  ipAddress: varchar("ipAddress", { length: 45 }), // IPv6 support
+  browser: varchar("browser", { length: 128 }),
+  browserVersion: varchar("browserVersion", { length: 32 }),
+  os: varchar("os", { length: 64 }),
+  osVersion: varchar("osVersion", { length: 32 }),
+  device: varchar("device", { length: 64 }), // Desktop, Mobile, Tablet
+  deviceModel: varchar("deviceModel", { length: 128 }),
+  country: varchar("country", { length: 64 }),
+  countryCode: varchar("countryCode", { length: 2 }),
+  city: varchar("city", { length: 128 }),
+  userAgent: text("userAgent"),
+  
   // All visitor data stored as JSON
   formData: text("formData"),
   

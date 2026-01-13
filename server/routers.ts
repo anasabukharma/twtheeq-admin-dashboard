@@ -78,6 +78,51 @@ export const appRouter = router({
         
         return { success: true };
       }),
+    
+    stats: protectedProcedure.query(async () => {
+      const db = await getDb();
+      if (!db) return {
+        total: 0,
+        active: 0,
+        submitted: 0,
+        activeSubmitted: 0,
+        activeNotSubmitted: 0,
+        byPage: {},
+      };
+      
+      const allVisitors = await db.select().from(visitors);
+      
+      const total = allVisitors.length;
+      const active = allVisitors.filter(v => v.isOnline === 1).length;
+      const submitted = allVisitors.filter(v => {
+        const data = v.formData ? JSON.parse(v.formData) : {};
+        return Object.keys(data).length > 0;
+      }).length;
+      const activeSubmitted = allVisitors.filter(v => {
+        const data = v.formData ? JSON.parse(v.formData) : {};
+        return v.isOnline === 1 && Object.keys(data).length > 0;
+      }).length;
+      const activeNotSubmitted = allVisitors.filter(v => {
+        const data = v.formData ? JSON.parse(v.formData) : {};
+        return v.isOnline === 1 && Object.keys(data).length === 0;
+      }).length;
+      
+      const byPage: Record<string, number> = {};
+      allVisitors.forEach(v => {
+        if (v.currentPage) {
+          byPage[v.currentPage] = (byPage[v.currentPage] || 0) + 1;
+        }
+      });
+      
+      return {
+        total,
+        active,
+        submitted,
+        activeSubmitted,
+        activeNotSubmitted,
+        byPage,
+      };
+    }),
   }),
 });
 

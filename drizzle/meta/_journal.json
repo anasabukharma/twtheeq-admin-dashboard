@@ -15,6 +15,13 @@
       "when": 1768327291049,
       "tag": "0001_pretty_stranger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1768339393398,
+      "tag": "0002_curved_scalphunter",
+      "breakpoints": true
     }
   ]
 }

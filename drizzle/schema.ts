@@ -25,4 +25,29 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+// Visitors table for tracking all visitor data
+export const visitors = mysqlTable("visitors", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: varchar("sessionId", { length: 128 }).notNull().unique(),
+  
+  // Connection status
+  isOnline: int("isOnline").default(0).notNull(),
+  lastSeen: timestamp("lastSeen").defaultNow().notNull(),
+  
+  // Read/Unread status
+  isRead: int("isRead").default(0).notNull(),
+  isFavorite: int("isFavorite").default(0).notNull(),
+  
+  // Current page tracking
+  currentPage: varchar("currentPage", { length: 64 }),
+  
+  // All visitor data stored as JSON
+  formData: text("formData"),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Visitor = typeof visitors.$inferSelect;
+export type InsertVisitor = typeof visitors.$inferInsert;
